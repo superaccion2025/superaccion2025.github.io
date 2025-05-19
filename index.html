@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Residentes</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <img src="logo.png" alt="Logo del colegio" />
+      </div>
+      <h1>Gestión de Residentes</h1>
+    </header>
+
+    <form id="formulario">
+      <h2>Registro del Residente</h2>
+      <label>Nombre*:
+        <input type="text" id="nombre" required />
+      </label>
+      <label>Edad*:
+        <input type="number" id="edad" required />
+      </label>
+      <label>Habitación:
+        <input type="text" id="habitacion" />
+      </label>
+      <label>Localización:
+        <input type="text" id="localizacion" />
+      </label>
+      <label>Fecha de Consulta:
+        <input type="date" id="fechaConsulta" />
+      </label>
+      <label>Enfermedades Crónicas:
+        <input type="text" id="cronicas" />
+      </label>
+      <label>Alergias:
+        <input type="text" id="alergias" />
+      </label>
+      <label>Vacunas:
+        <input type="text" id="vacunas" />
+      </label>
+      <label>Medicamentos:
+        <textarea id="medicamentos"></textarea>
+      </label>
+      <label>Visitas Médicas:
+        <textarea id="visitas"></textarea>
+      </label>
+      <label>Síntomas Personalizados:
+        <div id="sintomasContainer">
+          <div class="sintomaItem">
+            <input type="text" placeholder="Síntoma" class="sintomaNombre"/>
+            <select class="sintomaPrioridad">
+              <option value="1">Alta</option>
+              <option value="2">Media</option>
+              <option value="3">Baja</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" onclick="agregarSintoma()">+ Agregar síntoma</button>
+      </label>
+      <label>Estado de Enfermedad:
+        <select id="estado">
+          <option value="1">Crítico</option>
+          <option value="2">Avanzado</option>
+          <option value="3">Leve</option>
+          <option value="4">Estable</option>
+        </select>
+      </label>
+      <button type="submit">Registrar</button>
+    </form>
+
+    <h2>Cola de Pacientes</h2>
+    <input type="file" id="archivoExcel" accept=".xlsx" />
+    <table id="tablaPacientes">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Habitación</th>
+          <th>Localización</th>
+          <th>Fecha Consulta</th>
+          <th>Estado</th>
+          <th>Prioridad</th>
+          <th>Alergias</th>
+          <th>Vacunas</th>
+          <th>Síntomas</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button onclick="exportarExcel()">Exportar a Excel</button>
+  </div>
+
+  <!-- Modal de Edición -->
+  <div id="modalEdicion" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModal()">&times;</span>
+      <h2>Editar Paciente</h2>
+      <form id="formularioEdicion">
+        <input type="hidden" id="indiceEdicion" />
+        <label>Nombre:
+          <input type="text" id="editarNombre" required />
+        </label>
+        <label>Edad:
+          <input type="number" id="editarEdad" required />
+        </label>
+        <label>Habitación:
+          <input type="text" id="editarHabitacion" />
+        </label>
+        <label>Localización:
+          <input type="text" id="editarLocalizacion" />
+        </label>
+        <label>Fecha de Consulta:
+          <input type="date" id="editarFechaConsulta" />
+        </label>
+        <label>Enfermedades Crónicas:
+          <input type="text" id="editarCronicas" />
+        </label>
+        <label>Alergias:
+          <input type="text" id="editarAlergias" />
+        </label>
+        <label>Vacunas:
+          <input type="text" id="editarVacunas" />
+        </label>
+        <label>Medicamentos:
+          <textarea id="editarMedicamentos"></textarea>
+        </label>
+        <label>Visitas Médicas:
+          <textarea id="editarVisitas"></textarea>
+        </label>
+        <label>Estado de Enfermedad:
+          <select id="editarEstado">
+            <option value="1">Crítico</option>
+            <option value="2">Avanzado</option>
+            <option value="3">Leve</option>
+            <option value="4">Estable</option>
+          </select>
+        </label>
+        <label>Síntomas Personalizados:
+          <div id="editarSintomasContainer"></div>
+          <button type="button" onclick="agregarSintomaEdicion()">+ Agregar síntoma</button>
+        </label>
+        <button type="submit">Guardar Cambios</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
