@@ -74,7 +74,8 @@
 
     <h2>Cola de Pacientes</h2>
     <input type="file" id="archivoExcel" accept=".xlsx" />
-    <table id="tablaPacientes">
+    <div class="tabla-wrapper">
+  <table id="tablaPacientes">
       <thead>
         <tr>
           <th>Nombre</th>
@@ -91,7 +92,8 @@
         </tr>
       </thead>
       <tbody></tbody>
-    </table>
+   </table>
+</div>
 
     <button onclick="exportarExcel()">Exportar a Excel</button>
   </div>
