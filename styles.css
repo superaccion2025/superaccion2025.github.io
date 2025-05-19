@@ -64,7 +64,15 @@ button:hover {
   background-color: #0056b3;
 }
 
-table {
+/* Envoltura para la tabla para scroll horizontal */
+.tabla-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* La tabla en sí */
+#tablaPacientes {
+  min-width: 900px;
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
@@ -121,19 +129,4 @@ tr[data-prioridad="4"] { background-color: #ffffff; }
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
-}
-
-/* ✅ MODO MÓVIL: Scroll horizontal en tabla */
-@media (max-width: 768px) {
-  #tablaPacientes {
-    display: block;
-    overflow-x: auto;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  #tablaPacientes table {
-    width: 100%;
-    min-width: 800px;
-  }
 }
