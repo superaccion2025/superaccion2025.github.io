@@ -8,6 +8,25 @@ function estadoTexto(valor) {
   return valor == 1 ? "Crítico" : valor == 2 ? "Avanzado" : valor == 3 ? "Leve" : "Estable";
 }
 
+function estadoNumero(texto) {
+  const t = texto?.toLowerCase();
+  if (t.includes("crítico")) return 1;
+  if (t.includes("avanzado")) return 2;
+  if (t.includes("leve")) return 3;
+  return 4;
+}
+
+function parseSintomasDesdeTexto(texto) {
+  return texto.split("|").map(s => {
+    const [nombre, prioridadTexto] = s.trim().split(":");
+    const prioridad = prioridadTexto?.trim().toLowerCase();
+    return {
+      nombre: nombre?.trim() || "",
+      prioridad: prioridad === "alta" ? 1 : prioridad === "media" ? 2 : 3
+    };
+  }).filter(s => s.nombre);
+}
+
 function agregarSintoma() {
   const container = document.getElementById("sintomasContainer");
   const div = document.createElement("div");
@@ -30,7 +49,6 @@ function renderTabla() {
   pacientes.forEach((p, index) => {
     const fila = document.createElement("tr");
     fila.dataset.prioridad = parseInt(p.prioridad);
-
 
     const sintomasTexto = (p.sintomas || []).map(s => {
       const nivel = s.prioridad == 1 ? 'Alta' : s.prioridad == 2 ? 'Media' : 'Baja';
@@ -178,10 +196,46 @@ document.getElementById("formularioEdicion").addEventListener("submit", function
     estado: document.getElementById("editarEstado").value,
     sintomas,
   };
+
   pacientes[index].prioridad = calcularPrioridad(pacientes[index].estado, pacientes[index].cronicas);
 
   cerrarModal();
   renderTabla();
+});
+
+document.getElementById("archivoExcel").addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(sheet);
+
+      pacientes = json.map(p => ({
+        nombre: p.Nombre,
+        edad: p.Edad,
+        habitacion: p.Habitación,
+        localizacion: p.Localización,
+        fechaConsulta: p["Fecha Consulta"],
+        cronicas: p["Enfermedades Crónicas"],
+        alergias: p.Alergias,
+        vacunas: p.Vacunas,
+        medicamentos: p.Medicamentos,
+        visitas: p["Visitas Médicas"],
+        estado: estadoNumero(p["Estado de Enfermedad"]),
+        prioridad: p.Prioridad,
+        sintomas: parseSintomasDesdeTexto(p.Síntomas || "")
+      }));
+
+      renderTabla();
+    } catch (err) {
+      alert("⚠️ Error al importar el archivo. Asegúrate de que sea un Excel válido exportado desde esta app.");
+      console.error(err);
+    }
+  };
+  reader.readAsArrayBuffer(file);
 });
 
 function exportarExcel() {
@@ -206,7 +260,7 @@ function exportarExcel() {
 
   datos.forEach((p, i) => {
     const row = i + 2;
-    const color = p.Prioridad == 1 ? "FFCCCC" : p.Prioridad == 2 ? "FFE0B3" : p.Prioridad == 3 ? "FFF6B3" : "E0E0E0";
+    const color = p.Prioridad == 1 ? "FFCCCC" : p.Prioridad == 2 ? "FFE0B3" : p.Prioridad == 3 ? "FFF6B3" : "FFFFFF";
     for (let c = 0; c < Object.keys(p).length; c++) {
       const cell = XLSX.utils.encode_cell({ r: row - 1, c });
       if (!hoja[cell]) continue;
