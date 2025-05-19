@@ -64,13 +64,12 @@ button:hover {
   background-color: #0056b3;
 }
 
-/* Envoltura para la tabla para scroll horizontal */
+/* Envoltura para scroll horizontal */
 .tabla-wrapper {
   width: 100%;
   overflow-x: auto;
 }
 
-/* La tabla en sí */
 #tablaPacientes {
   min-width: 900px;
   width: 100%;
@@ -130,3 +129,4 @@ tr[data-prioridad="4"] { background-color: #ffffff; }
   font-weight: bold;
   cursor: pointer;
 }
+
