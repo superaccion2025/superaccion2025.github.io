@@ -95,38 +95,6 @@ tr[data-prioridad="4"] { background-color: #ffffff; }
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0,0,0,0.4);
-}
-
-.modal-contenido {
-  background-color: white;
-  margin: 5% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 600px;
-  border-radius: 10px;
-}
-
-.cerrar {
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-.modal-contenido {
-  max-height: 90vh;
-  overflow-y: auto;
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-}
-.modal {
-  display: none;
-  position: fixed;
   z-index: 1000;
   top: 0; left: 0;
   width: 100%;
@@ -135,4 +103,37 @@ tr[data-prioridad="4"] { background-color: #ffffff; }
   overflow: auto;
   padding: 20px;
   box-sizing: border-box;
+}
+
+.modal-contenido {
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin: auto;
+  width: 90%;
+  max-width: 600px;
+}
+
+.cerrar {
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ✅ MODO MÓVIL: Scroll horizontal en tabla */
+@media (max-width: 768px) {
+  #tablaPacientes {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #tablaPacientes table {
+    width: 100%;
+    min-width: 800px;
+  }
 }
