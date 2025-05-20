@@ -1,9 +1,5 @@
 let pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
 
-function calcularPrioridad(estado, cronicas) {
-  return Math.max(1, Math.min(4, parseInt(estado) - (cronicas.trim() !== "" ? 1 : 0)));
-}
-
 function estadoTexto(valor) {
   return valor == 1 ? "Crítico" : valor == 2 ? "Avanzado" : valor == 3 ? "Leve" : "Estable";
 }
@@ -85,6 +81,8 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     prioridad: item.querySelector(".sintomaPrioridad").value
   })).filter(s => s.nombre);
 
+  const estado = parseInt(document.getElementById("estado").value);
+
   const paciente = {
     nombre: document.getElementById("nombre").value,
     edad: document.getElementById("edad").value,
@@ -96,11 +94,11 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     vacunas: document.getElementById("vacunas").value,
     medicamentos: document.getElementById("medicamentos").value,
     visitas: document.getElementById("visitas").value,
-    estado: parseInt(document.getElementById("editarEstado").value),
+    estado: estado,
     sintomas,
+    prioridad: estado // ✅ Prioridad basada SOLO en estado
   };
 
-  paciente.prioridad = calcularPrioridad(paciente.estado, paciente.cronicas);
   pacientes.push(paciente);
   renderTabla();
   this.reset();
@@ -134,7 +132,7 @@ function editar(index) {
   document.getElementById("editarVacunas").value = p.vacunas;
   document.getElementById("editarMedicamentos").value = p.medicamentos;
   document.getElementById("editarVisitas").value = p.visitas;
-  document.getElementById("editarEstado").value = p.estado;
+  document.getElementById("editarEstado").value = String(p.estado);
 
   const container = document.getElementById("editarSintomasContainer");
   container.innerHTML = "";
@@ -182,6 +180,8 @@ document.getElementById("formularioEdicion").addEventListener("submit", function
     prioridad: item.querySelector(".sintomaPrioridad").value
   })).filter(s => s.nombre);
 
+  const estado = parseInt(document.getElementById("editarEstado").value);
+
   pacientes[index] = {
     nombre: document.getElementById("editarNombre").value,
     edad: document.getElementById("editarEdad").value,
@@ -193,11 +193,10 @@ document.getElementById("formularioEdicion").addEventListener("submit", function
     vacunas: document.getElementById("editarVacunas").value,
     medicamentos: document.getElementById("editarMedicamentos").value,
     visitas: document.getElementById("editarVisitas").value,
-    estado: document.getElementById("editarEstado").value,
+    estado: estado,
     sintomas,
+    prioridad: estado // ✅ Prioridad solo desde el estado
   };
-
-  pacientes[index].prioridad = calcularPrioridad(pacientes[index].estado, pacientes[index].cronicas);
 
   cerrarModal();
   renderTabla();
@@ -225,7 +224,7 @@ document.getElementById("archivoExcel").addEventListener("change", function (e) 
         medicamentos: p.Medicamentos,
         visitas: p["Visitas Médicas"],
         estado: estadoNumero(p["Estado de Enfermedad"]),
-        prioridad: p.Prioridad,
+        prioridad: estadoNumero(p["Estado de Enfermedad"]),
         sintomas: parseSintomasDesdeTexto(p.Síntomas || "")
       }));
 
@@ -275,3 +274,4 @@ function exportarExcel() {
 }
 
 renderTabla();
+
