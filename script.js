@@ -96,7 +96,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     vacunas: document.getElementById("vacunas").value,
     medicamentos: document.getElementById("medicamentos").value,
     visitas: document.getElementById("visitas").value,
-    estado: document.getElementById("estado").value,
+    estado: parseInt(document.getElementById("editarEstado").value),
     sintomas,
   };
 
